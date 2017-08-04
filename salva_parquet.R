@@ -7,6 +7,10 @@
 #' 
 
 
+library(stringr)
+library(dplyr)
+library(package)
+
 salva_parquet <- function(data, spark_connec, path){
   data_tbl <- copy_to(spark_connec, data, "data")
   spark_write_parquet(data_tbl, path)
