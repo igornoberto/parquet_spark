@@ -18,11 +18,29 @@ library(stringr)
 library(dplyr)
 library(sparklyr)
 
-prepara_parquet <- function(data){
-  #Trim, maiusculo
-  names(data) <- names(data) %>% toupper() %>% str_trim()
-  #Substitui caracteres por "_"
-  names(data) <- names(data) %>% str_replace_all("\\.|\\s|\\*|\\%|\\!|\\@|\\&|\\(|\\)", "_")
+prepara_parquet <- function(base, spark_connec = NULL, sep = ","){
+  if(!exists("base") && !file.exists(base))
+    stop("'base' needs to be a directory or an environment variable")
+  if(exists("base")){
+    #Trim, maiusculo
+    names(base) <- names(base) %>% toupper() %>% str_trim()
+    #Substitui caracteres por "_"
+    names(base) <- names(base) %>% str_replace_all("\\.|\\s|\\*|\\%|\\!|\\@|\\&|\\(|\\)", "_")
+  }
+  if(file.exists(base)){
+    if(is.null(spark_connec)){
+      stop("spark_connec is missing")
+    }
+    if(!isTRUE(spark_connection_is_open(spark_connec))){
+      stop("There is no Spark connection open")
+    }
+    #Lê o arquivo (Por enquanto apenas csv)
+    base_tbl <- spark_read_csv(sc = spark_connec, name =  "base_spark", path = base, delimiter = sep)
+    #verifica leitura correta
+    if("base_spark" %in% src_tbls(spark_connec)){
+      
+    }
+  }
   
 }
 
