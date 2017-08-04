@@ -19,18 +19,15 @@ library(dplyr)
 library(sparklyr)
 
 prepara_parquet <- function(data){
+  #Trim, maiusculo
   names(data) <- names(data) %>% toupper() %>% str_trim()
-  names(data) <- str_trim(toupper(names(data)))
+  #Substitui caracteres por "_"
+  names(data) <- names(data) %>% str_replace_all("\\.|\\s|\\*|\\%|\\!|\\@|\\&|\\(|\\)", "_")
   
-  
-  names(plant) <- mutate_each(names(plant), funs(toupper))
-  names(plant) <- toupper(names(plant))
 }
 
 
 # ------ Corriqueiro: ------
-install.packages("dplyr")
-library(sparklyr)
 sc <- spark_connect(master = "local")
 spark_connection_is_open(sc)
 iris_l <- copy_to(sc, iris, "iris")
