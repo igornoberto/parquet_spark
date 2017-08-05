@@ -29,7 +29,7 @@ prepara_parquet <- function(base, spark_connec = NULL, sep = ","){
   }
   if(file.exists(base)){
     if(is.null(spark_connec)){
-      stop("spark_connec is missing")
+      stop("spark_connec is missing!")
     }
     if(!isTRUE(spark_connection_is_open(spark_connec))){
       stop("There is no Spark connection open")
